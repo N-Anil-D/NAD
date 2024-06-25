@@ -1,7 +1,7 @@
 <x-guest-layout>
     <x-authentication-card>
         <x-slot name="logo">
-            <x-authentication-card-logo />
+            <img src="{{ url('img/login-page-logo.png') }}" alt="tradeed logo" class="px-4 md:px-0">
         </x-slot>
 
         <x-validation-errors class="mb-4" />

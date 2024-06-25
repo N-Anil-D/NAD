@@ -11,7 +11,6 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    Route::get('/adv-calc', function () { return view('adv-calculator'); })->name('adv.calc');
+    Route::get('/adv-calc-records', function () { return view('adv-calculator-records'); })->name('adv.calc.rec');
 });

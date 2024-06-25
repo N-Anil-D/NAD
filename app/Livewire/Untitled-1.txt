@@ -1,0 +1,131 @@
+// This Pine Script™ code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
+// © IronheadNAD
+
+//@version=5
+indicator("NAD 5 Min Trade", overlay=true)
+
+// Kullanıcıdan RSI ve CCI parametrelerini alma
+rsi_length = input.int(30, title="RSI Length", minval=1)
+rsi_high_threshold = input.float(50.5, title="RSI High Threshold")
+rsi_low_threshold = input.float(49.5, title="RSI Low Threshold")
+
+cci_length = input.int(20, title="CCI Length", minval=1)
+cci_high_threshold = input.float(defval= 98, title="CCI High Threshold")
+cci_low_threshold = input.float(defval= -98, title="CCI Low Threshold")
+
+// Kullanıcıdan çizgi parametrelerini alma
+tp_line_color = input.color(color.green, title="Take Profit Color")
+tp_line_width = input.int(1, title="Take Profit Width", minval=1, maxval=4)
+sl_line_color = input.color(color.red, title="Stop Loss Color")
+sl_line_width = input.int(1, title="Stop Loss Width", minval=1, maxval=4)
+e_line_color = input.color(color.white, title="Entry Color")
+e_line_width = input.int(1, title="Entry Width", minval=1, maxval=4)
+
+// TP&SL Rate
+tp_rate = input(0.3, "TP Rate", "TP % Rate")
+sl_rate = input(0.5, "SL Rate", "SL % Rate")
+
+// JustActiveLong = input.bool(true, "Only Show Last Long Position")
+// JustActiveShort = input.bool(true, "Only Show Last Short Position")
+
+// RSI göstergesi
+rsi_value = ta.rsi(close, rsi_length)
+
+// CCI göstergesi
+cci_value = ta.cci(hlc3, cci_length)
+
+// Özet Göstergeler
+// basis = rsi_value, cci_value
+
+// Sinyal şartları
+LONG_TRIGGER = rsi_value > rsi_high_threshold and cci_value < cci_low_threshold
+SHORT_TRIGGER = rsi_value < rsi_low_threshold and cci_value > cci_high_threshold
+
+// Alarm Durumları
+long_alarm = 0
+short_alarm = 0
+var int long_counter = 0
+var int short_counter = 0
+var float long_e = 0
+var float long_tp = 0
+var float long_sl = 0
+var float short_e = 0
+var float short_tp = 0
+var float short_sl = 0
+var line e_line = na
+var line tp_line = na
+var line sl_line = na
+
+
+// Sinyal gecikme kontrolü
+long_signal = LONG_TRIGGER and long_counter == 0
+short_signal = SHORT_TRIGGER and short_counter == 0
+
+// Sayaç güncellemesi
+if (long_signal)
+    long_counter := 10
+if (short_signal)
+    short_counter := 10
+
+if (long_counter > 0)
+    long_counter := long_counter - 1
+if (short_counter > 0)
+    short_counter := short_counter - 1
+
+
+// Sinyal & Sinyal Tekrarının Engellenmesi & Alarm
+tp_rate := tp_rate/100
+sl_rate := sl_rate/100
+if (long_signal and long_alarm==0)
+    long_alarm := 1
+    long_e := bar_index
+    long_tp := close * (1.000 + tp_rate)
+    long_sl := close * (1.000 - sl_rate)
+    e_line := line.new(x1=bar_index, y1=close, x2=bar_index + 50, y2=close, color=e_line_color, width=e_line_width, style=line.style_dotted)
+    tp_line := line.new(x1=bar_index, y1=long_tp, x2=bar_index + 50, y2=long_tp, color=tp_line_color, width=tp_line_width)
+    sl_line := line.new(x1=bar_index, y1=long_sl, x2=bar_index + 50, y2=long_sl, color=sl_line_color, width=sl_line_width)
+    // if(JustActiveLong)
+    //     line.delete(e_line[1])
+    //     line.delete(tp_line[1])
+    //     line.delete(sl_line[1])
+
+    dt = time - time[1]
+    long_e_price_label = label.new(time + 50 * dt, close, str.tostring(close,'#.0'), xloc = xloc.bar_time, color=color.rgb(255, 255, 255, 71), style=label.style_label_left, textcolor=color.white)
+    long_tp_price_label = label.new(time + 50 * dt, long_tp, str.tostring(long_tp,'#.0'), xloc = xloc.bar_time, color=color.rgb(76, 175, 79, 70), style=label.style_label_left, textcolor=color.white)
+    long_sl_price_label = label.new(time + 50 * dt, long_sl, str.tostring(long_sl,'#.0'), xloc = xloc.bar_time, color=color.rgb(255, 82, 82, 74), style=label.style_label_left, textcolor=color.white)
+    label.delete(long_e_price_label[1])
+    label.delete(long_tp_price_label[1])
+    label.delete(long_sl_price_label[1])
+
+if (short_signal and short_alarm==0)
+    short_alarm := 1
+    short_e := bar_index
+    short_tp := close * (1.000 - tp_rate)
+    short_sl := close * (1.000 + sl_rate)
+    e_line := line.new(x1=bar_index, y1=close, x2=bar_index + 50, y2=close, color=e_line_color, width=e_line_width, style=line.style_dotted)
+    tp_line := line.new(x1=bar_index, y1=short_tp, x2=bar_index + 50, y2=short_tp, color=tp_line_color, width=tp_line_width)
+    sl_line := line.new(x1=bar_index, y1=short_sl, x2=bar_index + 50, y2=short_sl, color=sl_line_color, width=sl_line_width)
+    // if(JustActiveShort)
+    //     line.delete(e_line[1])
+    //     line.delete(tp_line[1])
+    //     line.delete(sl_line[1])
+
+    dt = time - time[1]
+    short_e_price_label = label.new(time + 50 * dt, close, str.tostring(close,'#.0'), xloc = xloc.bar_time, color=color.rgb(255, 255, 255, 71), style=label.style_label_left, textcolor=color.white)
+    short_tp_price_label = label.new(time + 50 * dt, short_tp, str.tostring(short_tp,'#.0'), xloc = xloc.bar_time, color=color.rgb(76, 175, 79, 70), style=label.style_label_left, textcolor=color.white)
+    short_sl_price_label = label.new(time + 50 * dt, short_sl, str.tostring(short_sl,'#.0'), xloc = xloc.bar_time, color=color.rgb(255, 82, 82, 74), style=label.style_label_left, textcolor=color.white)
+    label.delete(short_e_price_label[1])
+    label.delete(short_tp_price_label[1])
+    label.delete(short_sl_price_label[1])
+
+
+
+alertcondition(long_signal and long_alarm==1, title = "LONG TRIGGER", message = "L")
+plotshape(series=long_signal and long_alarm==1, location=location.belowbar, style=shape.triangleup, size=size.small, textcolor=color.white, color=color.green, title="LONG Signal",text="LONG")
+alertcondition(short_signal and short_alarm==1, title = "SHORT TRIGGER", message = "S")
+plotshape(series=short_signal and short_alarm==1, location=location.abovebar, style=shape.triangledown, size=size.small, textcolor=color.white, color=color.red, title="SHORT Signal",text="SHORT")
+
+long_alarm := 0
+short_alarm := 0
+
+
