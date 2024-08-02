@@ -1,34 +1,34 @@
 @section('custom-css')
-<style>
-    
-    input[type="number"]::-webkit-inner-spin-button,
-    input[type="number"]::-webkit-outer-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
-    }
+    <style>
+        
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
 
-    .tradeed-blue{
-        color: #1fd6ff;
-    }
-    .tradeed-red{
-        color: #ff6666;
-    }
-    .tradeed-gray{
-        background-color: #2d3542;
-    }
-    .tradeed-white{
-        color: #a6aebb;
-    }
-    .card.image-full:before {
-        opacity: 0;
-    }
-</style>      
+        .tradeed-blue{
+            color: #1fd6ff;
+        }
+        .tradeed-red{
+            color: #ff6666;
+        }
+        .tradeed-gray{
+            background-color: #2d3542;
+        }
+        .tradeed-white{
+            color: #a6aebb;
+        }
+        .card.image-full:before {
+            opacity: 0;
+        }
+    </style>      
 @endsection
 @section('custom-js')
-<script>
-    window.addEventListener('hideModal', event => {
-    $('#my_modal_5').modal('hide');
-    })
+    <script>
+        window.addEventListener('hideModal', event => {
+        $('#saveCalculationModal').modal('hide');
+        })
     </script>     
 @endsection
 
@@ -80,17 +80,12 @@
                 <div class="grid grid-cols-1 mt-8">
                     <div class="card-actions justify-between ">
                         <button class="btn tradeed-gray" wire:click='calculate()'>HESAPLA</button>
-                        {{-- <button class="btn bg-gradient-to-r from-neutral-900 to-emerald-900" wire:click='calculate()'>HESAPLA</button> --}}
                         @if (!is_null($positions->first()))
 
                         <!-- Open the modal using ID.showModal() method -->
-                            <button class="btn tradeed-gray" onclick="my_modal_5.showModal()">KAYDET</button>
-
-                          {{-- <button class="btn tradeed-gray">KAYDET</button> --}}
-                          {{-- <button class="btn bg-gradient-to-l from-stone-950 to-blue-950">KAYDET</button> --}}
+                            <button class="btn tradeed-gray" onclick="saveCalculationModal.showModal()">KAYDET</button>
                         @endif
                         <button class="btn tradeed-gray" wire:click='resetComponentData()'>SIFIRLA</button>
-                        {{-- <button class="btn bg-gradient-to-r from-red-800 to-neutral-950" wire:click='resetComponentData()'>SIFIRLA</button> --}}
                     </div>
                 </div>
             </div>
@@ -104,7 +99,7 @@
                     <span class="font-extrabold text-md">Margin : %{{ $size }}</span>
                     <span class="font-extrabold text-md">Total PnL Ratio : {{ $positions->count()>0 ? "%" . number_format(100*($positions->sum('profit'))/$mainLoad, 0, '', '') : "" }}</span>
                     <span class="font-extrabold text-md">Total PnL : {{ $positions->count()>0 ? number_format($positions->sum('profit'), 1, '.', ',')."$": "" }}</span>
-                    <span class="font-extrabold text-md">Portfolio Change : {{ $positions->count()>0 ? "X". number_format(($positions->sum('profit')+$mainLoad)/$mainLoad, 2, '.', ',') : "" }}</span>
+                    <span class="font-extrabold text-md">Portfolio Change : {{ $positions->count()>0 ? "X". number_format(($positions->sum('profit')+$mainLoad)/$mainLoad, 1, '.', ',') : "" }}</span>
                     <span class="font-extrabold text-md">Stop Lose Waste : {{ $totalSL<0 ? number_format($totalSL, 1, '.', ' '):"" }}</span>
                     <span class="font-extrabold text-md">Strateegy Success Rate : {{ $positions->count()>0 ? '%'. number_format(($profitCount/$positions->count())*100, 1, '.', ','):"" }}</span>
                 </div>
@@ -115,7 +110,6 @@
         @if ($positions->count())
             @foreach ($positions as $positionKey => $positionVal)
                 <div class="card {{ $positionVal['tp'] ? 'tradeed-gray':'bg-base-100' }} {{ $editPositionKey===$positionKey ? 'ring-4 ring-inset ring-neutral-400':'' }} text-primary-content" wire:click='editPosition({{ $positionKey }})' >
-                {{-- <div class="card {{ $positionVal['tp'] ? 'bg-emerald-900':' bg-red-900' }} {{ $editPositionKey===$positionKey ? 'ring-4 ring-inset ring-neutral-400':'' }} text-primary-content" wire:click='editPosition({{ $positionKey }})'> --}}
                     <div class="card-body p-6 pl-0">
                         <div class="flex flex-row">
                             <div class="basis-full lg:px-6 px-2">
@@ -134,36 +128,22 @@
     </div>
 
 
-<dialog id="my_modal_5" class="modal modal-bottom sm:modal-middle">
-    <div class="modal-box">
-        <h3 class="font-bold text-lg">Save Calculation With Name</h3>
-        <input type="text" class="input input-bordered input-info w-full max-w-xs mt-6" wire:model.lazy='name' />
-        <div class="modal-action">
-            <form method="dialog">
-              <!-- if there is a button in form, it will close the modal -->
-              <button class="btn" wire:click='saveCollection'>Save</button>
-              <button class="btn">Close</button>
-            </form>
+    <dialog id="saveCalculationModal" class="modal modal-bottom sm:modal-middle">
+        <div class="modal-box">
+            <h3 class="font-bold text-lg">Save Calculation With Name</h3>
+            <input type="text" class="input input-bordered input-info w-full max-w-xs mt-6" wire:model.lazy='name' />
+            <div class="modal-action">
+                <form method="dialog">
+                <!-- if there is a button in form, it will close the modal -->
+                <button class="btn" wire:click='saveCollection'>Save</button>
+                <button class="btn">Close</button>
+                </form>
+            </div>
         </div>
-    </div>
-    <form method="dialog" class="modal-backdrop">
-        <button>Close</button>
-    </form>
-</dialog>
-
-
-{{-- <dialog id="my_modal_5" class="modal modal-bottom sm:modal-middle">
-    <div class="modal-box">
-      <h3 class="font-bold text-lg">Hello!</h3>
-      <p class="py-4">Press ESC key or click the button below to close</p>
-      <div class="modal-action">
-        <form method="dialog">
-          <!-- if there is a button in form, it will close the modal -->
-          <button class="btn">Close</button>
+        <form method="dialog" class="modal-backdrop">
+            <button>Close</button>
         </form>
-      </div>
-    </div>
-  </dialog> --}}
+    </dialog>
 
 </div>
 

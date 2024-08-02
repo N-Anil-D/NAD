@@ -1,28 +1,28 @@
 @section('custom-css')
-<style>
-    
-    input[type="number"]::-webkit-inner-spin-button,
-    input[type="number"]::-webkit-outer-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
-    }
+  <style>
+      
+      input[type="number"]::-webkit-inner-spin-button,
+      input[type="number"]::-webkit-outer-spin-button {
+          -webkit-appearance: none;
+          margin: 0;
+      }
 
-    .tradeed-blue{
-        color: #1fd6ff;
-    }
-    .tradeed-red{
-        color: #ff6666;
-    }
-    .tradeed-gray{
-        background-color: #2d3542;
-    }
-    .tradeed-white{
-        color: #a6aebb;
-    }
-    .card.image-full:before {
-        opacity: 0;
-    }
-</style>      
+      .tradeed-blue{
+          color: #1fd6ff;
+      }
+      .tradeed-red{
+          color: #ff6666;
+      }
+      .tradeed-gray{
+          background-color: #2d3542;
+      }
+      .tradeed-white{
+          color: #a6aebb;
+      }
+      .card.image-full:before {
+          opacity: 0;
+      }
+  </style>      
 @endsection
 <div>
     <div>
