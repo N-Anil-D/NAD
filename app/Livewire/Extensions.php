@@ -2,12 +2,12 @@
 
 namespace App\Livewire;
 
-use Livewire\Component;
-use Livewire\WithFileUploads;
-use Livewire\Attributes\Validate;
+use Livewire\{Component,WithFileUploads};
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\ExampleUserInfoImport;
-use Livewire\Attributes\{On,Renderless};
+use App\Exports\ExampleUserExport;
+use Livewire\Attributes\Validate;
+use Illuminate\Support\Facades\Validator;
 
 
 class Extensions extends Component
@@ -15,18 +15,14 @@ class Extensions extends Component
     use WithFileUploads;
 
     public $exampleExcelFile;
-    public $oldExampleExcelFile;
-    // public $sameFileCheck;
 
     public function mount()
     {
         // $this->sameFileCheck = false;
     }
-    
  
     public function render()
     {
-        // dd($this->sameFileCheck);
         return view('livewire.extensions');
     }
     
@@ -35,13 +31,19 @@ class Extensions extends Component
         return response()->download(public_path('/exampleFile/Example-Import-File.xlsx'), 'Example-Import-File.xlsx');
     }
 
-    public function uploadexampleExcelFile()
+    public function importExampleExcelFile()
     {
-        // dd('here');
-        $this->oldExampleExcelFile = $this->exampleExcelFile;
-        $this->exampleExcelFile = null;
-        // Excel::import(new ExampleUserInfoImport, $this->exampleExcelFile);
-        $this->dispatch('hideModal'); 
+        Validator::validate((array('exampleExcelFile'=>$this->exampleExcelFile)), [
+            'exampleExcelFile' => [ 'required','mimes:xlsx,xls']
+        ]);
+            
+        Excel::import(new ExampleUserInfoImport, $this->exampleExcelFile);
+        $this->dispatch('hideModal');
+    }
+
+    public function exportExampleExcelFile()
+    {
+        return Excel::download(new ExampleUserExport, 'ExampleExcelFile.xlsx');
     }
 
 }

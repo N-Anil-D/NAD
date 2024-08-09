@@ -1,10 +1,13 @@
 
 @section('custom-js')
+    @script
     <script>
-        window.addEventListener('showModal', event => {
-            $('#importModal').modal('show');
-        })
-    </script> 
+        $wire.on('hideModal', () => {
+            document.getElementById('importModal').close();
+
+        });
+    </script>
+    @endscript
 @endsection
 
 <div class="grid gap-6 lg:grid-cols-2 lg:gap-8">
@@ -69,16 +72,15 @@
             <h2 class="text-xl font-semibold text-black dark:text-white">Import Your Own Excel File To Export</h2>
 
             <p class="mt-4 text-sm/relaxed">
-                I am using Laravel-Excel extension. Laravel-Excel extension is able do import and export datas via excel file. Create your own data in excel and import it. After than you aree able  <u><b>Datas will be reset in every import.</b></u>
+                I am using Laravel-Excel extension. Laravel-Excel extension is able do import and export datas via excel file. Create your own data from example excel file than import it. You will be able to download your date from export. <br>
+                <u><b>Datas will be reset in every import.</b></u>
             </p>
-            <div class="flex justify-around mt-2">
-                <button class="btn btn-outline" wire:click="exampleImportFileDownload()">Download Example File</button>
-                {{-- <button class="btn btn-outline btn-accent" wire:click="$dispatch('showModal')">Import</button> --}}
+            <div class="grid grid-flow-col justify-around mt-2">
+                <button class="btn btn-outline" wire:click="importExampleExcelFile()">Download Example Excel</button>
                 <button class="btn btn-outline btn-accent" onclick="importModal.showModal()">Import</button>
-                <button class="btn btn-outline btn-primary">Export</button>
+                <button class="btn btn-outline btn-primary" wire:click="exportExampleExcelFile()">Export</button>
             </div>
         </div>
-        {{-- <svg class="size-6 shrink-0 self-center stroke-[#FF2D20]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75"/></svg> --}}
     </a>
 
     <a
@@ -121,39 +123,35 @@
     </div>
 
 
-
-    <dialog id="importModal" class="modal modal-bottom sm:modal-middle" wire:ignore>
+    {{-- https://developer.mozilla.org/en-US/docs/Web/HTML/Element/dialog#technical_summary <dialog> TAG INFO--}}
+        
+    {{-- https://developer.mozilla.org/en-US/docs/Web/HTML/Element/dialog#technical_summary <dialog> TAG INFO--}}
+        
+    {{-- https://developer.mozilla.org/en-US/docs/Web/HTML/Element/dialog#technical_summary <dialog> TAG INFO--}}
+    <dialog id="importModal" class="modal modal-middle" wire:ignore>
         <div class="modal-box">
-            <h3 class="font-bold text-lg">Imprting Excel</h3>
-            {{-- <div class="modal-action"> --}}
-            <div class="">
+            <h3 class="font-bold text-lg">Import Excel</h3>
+            <div class="flex flex-col my-6">
                 <form wire:submit.prevent="uploadexampleExcelFile">
-                    <div class="my-6">
-                        <div class="grid row-auto grid-flow-col lg:mt-6 mt-2">
-                            <div class="">
-                                <input class="file-input file-input-bordered file-input-success w-full max-w-xs" type="file" wire:model="exampleExcelFile">
-                                @error('exampleExcelFile') <span class="error">{{ $message }}</span> @enderror
-                            </div>
-                        
-                            <div class="">
-                                <button class="btn btn-outline btn-accent" type="submit">Import</button>
-                            </div>
+                    <div class="grid grid-flow-row auto-rows-max lg:mt-6 mt-2">
+                        <input class="file-input file-input-bordered file-input-success w-full" type="file" wire:model="exampleExcelFile">
+                        @error('exampleExcelFile') <span class="error">{{ $message }}</span> @enderror
+                        <div class="mt-3">
+                            <button class="btn btn-outline btn-accent w-full" type="submit">Import</button>
                         </div>
-
                     </div>
                 </form>
-                <div class="flex justify-start modal-action">
-                    <form method="dialog">
-                      <!-- if there is a button in form, it will close the modal -->
-                      {{-- <button class="btn">Close</button> --}}
-                      <button class="btn btn-outline px-5">Close</button>
+                <div class="flex justify-start modal-action mt-2">
+                    <form method="dialog" style="width: 100%">
+                        <!-- if there is a button in form, it will close the modal -->
+                        {{-- <button class="btn">Close</button> --}}
+                        <button class="btn btn-outline px-5 w-full">Close</button>
                     </form>
-                  </div>
+                </div>
             </div>
-            {{-- </div> --}}
         </div>
         <form method="dialog" class="modal-backdrop">
-            <button>Close</button>
+            <button></button>
         </form>
     </dialog>
 

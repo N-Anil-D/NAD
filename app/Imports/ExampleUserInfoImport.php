@@ -15,7 +15,7 @@ class ExampleUserInfoImport implements ToModel, WithHeadingRow
     */
     public function model(array $row)
     {
-        dd('dksjagdas');
+        // dd('dksjagdas');
         return new ExampleUserInfo([
             'name'   => $row['name'],
             'age'    => $row['age'], 
