@@ -8,11 +8,13 @@ use App\Imports\ExampleUserInfoImport;
 use App\Exports\ExampleUserExport;
 use Livewire\Attributes\Validate;
 use Illuminate\Support\Facades\Validator;
-
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 
 class Extensions extends Component
 {
     use WithFileUploads;
+    use LivewireAlert;
+
 
     public $exampleExcelFile;
 
@@ -23,6 +25,7 @@ class Extensions extends Component
  
     public function render()
     {
+        // $this->alert('success', 'Success is approaching!');
         return view('livewire.extensions');
     }
     
@@ -44,6 +47,11 @@ class Extensions extends Component
     public function exportExampleExcelFile()
     {
         return Excel::download(new ExampleUserExport, 'ExampleExcelFile.xlsx');
+    }
+
+    public function runSweetAlert($type)
+    {
+        $this->alert($type, 'Basic Alert');
     }
 
 }
