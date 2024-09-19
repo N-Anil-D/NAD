@@ -1,10 +1,18 @@
-<x-guest-layout>
+@if ($bylal)
+    <div class="relative overflow-hidden rounded-lg bg-cover bg-no-repeat text-center bg-fixed" style="background-image: url('{{ url('img/bullAndBear.png') }}');">
+@else
+    <div class="relative overflow-hidden rounded-lg bg-cover bg-no-repeat text-center bg-fixed">
+@endif
     <x-authentication-card>
         <x-slot name="logo">
-            <img src="{{ url('img/login-page-logo.png') }}" alt="tradeed logo" class="px-4 md:px-0">
+            @if ($bylal)
+                <img src="{{ url('img/login-page-logo.png') }}" alt="tradeed logo" class="px-4 md:px-0">
+            @else
+                <img src="{{ url('img/NAD_Logo.png') }}" alt="tradeed logo" class="px-4 md:px-0">
+            @endif
         </x-slot>
 
-        <x-validation-errors class="mb-4" />
+        {{-- <x-validation-errors class="mb-4" /> --}}
 
         @session('status')
             <div class="mb-4 font-medium text-sm text-green-600 dark:text-green-400">
@@ -57,11 +65,13 @@
                 <x-button class="ms-4">
                     {{ __('Log in') }}
                 </x-button> --}}
-
-                <a href="{{ url('6ylal/login') }}" class="border border-blue-600 text-white rounded-md px-4 py-2 ml-2">
+                <button class="btn bg-indigo-700 ms-4" wire:click.prevent="swapLoginPage">
                     Swap to 6ylal Login Page
-                </a> 
+                </button>
+                {{-- <a href="{{ url('6ylal/login') }}" class="border border-blue-600 text-white rounded-md px-4 py-2 ml-2">
+                    Swap to 6ylal Login Page
+                </a>  --}}
             </div>
         </form>
     </x-authentication-card>
-</x-guest-layout>
+</div>
