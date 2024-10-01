@@ -15,4 +15,5 @@ Route::middleware([
 ])->group(function () {
     Route::get('/adv-calc', function () { return view('adv-calculator'); })->name('adv.calc');
     Route::get('/adv-calc-records', function () { return view('adv-calculator-records'); })->name('adv.calc.rec');
+    Route::get('/usr-url-lim-1', function () { return view('user-url-limitation'); })->name('usr.url.lim1');
 });

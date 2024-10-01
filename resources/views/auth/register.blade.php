@@ -1,14 +1,16 @@
-<x-guest-layout>
+<x-layouts.log-in>
     <x-authentication-card>
         <x-slot name="logo">
-            <x-authentication-card-logo />
+            <img src="{{ url('img/NAD_Logo.png') }}" alt="nad logo" class="px-4 md:px-0">
         </x-slot>
 
         <x-validation-errors class="mb-4" />
 
         <form method="POST" action="{{ route('register') }}">
             @csrf
-
+            <div>
+                <p><span class="text-red-500">*</span> This registiration do not require activation check. This registiration is only allowing you to access, test user dependent works.</p>
+            </div>
             <div>
                 <x-label for="name" value="{{ __('Name') }}" />
                 <x-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
@@ -57,4 +59,4 @@
             </div>
         </form>
     </x-authentication-card>
-</x-guest-layout>
+</x-layouts.log-in>
