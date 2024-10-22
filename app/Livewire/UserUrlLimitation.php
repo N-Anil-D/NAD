@@ -2,13 +2,17 @@
 
 namespace App\Livewire;
 
+use App\Models\User;
 use Livewire\Component;
 
 class UserUrlLimitation extends Component
 {
+    public $users;
+
+
     public function render()
     {
-        dd('sadas');
-        return view('livewire.user-url-limitation');
+        $this->users = User::get();
+        return view('livewire.user-url-limitation',['users'=>$this->users]);
     }
 }
