@@ -1,7 +1,10 @@
 <x-guest-layout>
     <x-authentication-card>
         <x-slot name="logo">
-            <img src="{{ url('img/login-page-logo.png') }}" alt="tradeed logo" class="px-4 md:px-0">
+            {{-- <img src="{{ url('img/login-page-logo.png') }}" alt="tradeed logo" class="px-4 md:px-0"> --}}
+            <a href="{{ route('extensions') }}">
+                <img src="{{ url('img/NAD_Logo.png') }}" alt="NAD_Logo" class="px-4 md:px-0">
+            </a>
         </x-slot>
 
         <x-validation-errors class="mb-4" />
@@ -58,9 +61,9 @@
                     {{ __('Log in') }}
                 </x-button> --}}
 
-                <a href="{{ url('6ylal/login') }}" class="border border-blue-600 text-white rounded-md px-4 py-2 ml-2">
+                {{-- <a href="{{ url('6ylal/login') }}" class="border border-blue-600 text-white rounded-md px-4 py-2 ml-2">
                     Swap to 6ylal Login Page
-                </a> 
+                </a>  --}}
             </div>
         </form>
     </x-authentication-card>

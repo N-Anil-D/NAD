@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\GoogleSocialiteController;
 
-Route::get('/', function () { return view('extensions');});
+Route::get('/', function () { return view('extensions');})->name('extensions');
 Route::get('auth/google', [GoogleSocialiteController::class, 'redirectToGoogle']);  // redirect to google login
 Route::get('google/callback', [GoogleSocialiteController::class, 'handleCallback']);    // callback route after google account chosen
 Route::get('/log-in', function () { return view('auth.log-in');})->name('custom.login');

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -18,7 +18,8 @@
         @livewireStyles
     </head>
     <body>
-        <div class="relative overflow-hidden rounded-lg bg-cover bg-no-repeat p-12 text-center bg-fixed" style="background-image: url('{{ url('img/bullAndBear.png') }}');">
+        {{-- <div class="relative overflow-hidden rounded-lg bg-cover bg-no-repeat p-12 text-center bg-fixed" style="background-image: url('{{ url('img/bullAndBear.png') }}');"> --}}
+        <div class="relative overflow-hidden rounded-lg bg-cover bg-no-repeat p-12 text-center bg-fixed bg-slate-900 dark:bg-gradient-to-b from-black from-20% to-red-900">
             {{-- <div class="font-sans text-gray-900 dark:text-gray-100 antialiased"> --}}
 
             {{ $slot }}
