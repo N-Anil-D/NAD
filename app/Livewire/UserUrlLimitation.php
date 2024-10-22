@@ -8,6 +8,7 @@ class UserUrlLimitation extends Component
 {
     public function render()
     {
+        dd('sadas');
         return view('livewire.user-url-limitation');
     }
 }
